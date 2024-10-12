@@ -26,7 +26,11 @@ body {
 }
 
 .image-section {
+<<<<<<< Updated upstream
     width: fit-content;
+=======
+    width: 50%;
+>>>>>>> Stashed changes
     display: flex;
     justify-content: center;
     align-items: center;
@@ -80,6 +84,19 @@ img {
     outline: none;
     border-color: #00a699;
 }
+<<<<<<< Updated upstream
+=======
+/* 
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.remember-me input {
+    margin-right: 5px;
+} */
+>>>>>>> Stashed changes
 
 button {
     width: 100%;
@@ -98,8 +115,23 @@ button:hover {
     background-color: #00897b;
 }
 
+<<<<<<< Updated upstream
 #error-message {
     color: red;
     font-size: 14px;
     margin-top: 10px;
 }
+=======
+/* .forgot-password {
+    display: block;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #00a699;
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+} */
+>>>>>>> Stashed changes
