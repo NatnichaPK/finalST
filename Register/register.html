@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="register.css">
+    <title>Register</title>
+</head>
+<body>
+    <div class="container">
+        <div class="image-section">
+            <img src="/register.jpg" alt="Pet Image">
+        </div>
+
+        <div class="form-section">
+            <div class="logo">
+                <img src="/pet-care logo.png" alt="Logo">
+                <h1>Pet Care</h1>
+            </div>
+
+            <p>Sign In to continue</p>
+
+            <div class="form-group">
+                <input type="text" id="email" name="email" placeholder="Email" required>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <input type="password" id="confirmpassword" name="confirmpassword" placeholder="Confirm Password" required>
+                <p id="error-message" class="error-message"></p>
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit">Register</button>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    document.querySelector("button").addEventListener("click", function(event) {
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirmpassword").value;
+        var errorMessage = document.getElementById("error-message");
+        
+        if (password !== confirmPassword) {
+            errorMessage.textContent = "Passwords do not match!";
+            event.preventDefault();
+        } else {
+            errorMessage.textContent = "";
+        }
+    });
+</script>
