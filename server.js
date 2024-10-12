@@ -8,6 +8,8 @@ app.use(express.static(__dirname))
 
 mongoose.connect('mongodb+srv://NateNunthiphat:PrgUXzjFNK3tHs0U@cluster0.yhzls.mongodb.net/')
 const db = mongoose.connection
+
+
 db.once('open',()=>{
     console.log("Database connected")
 })
