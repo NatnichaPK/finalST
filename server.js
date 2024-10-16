@@ -36,7 +36,6 @@ app.get('/', (req, res) => {
     }
 });
 
-
 app.get('/logout', (req, res) => {
     res.sendFile(path.join(__dirname, 'Homes', 'home.html'));
 });
@@ -83,7 +82,6 @@ app.post('/login', async (req, res) => {
         return res.redirect('/Login/login.html?error=password_wrong');
     }
 });
-
 
 // Start the server
 app.listen(3000, () => {

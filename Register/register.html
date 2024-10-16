@@ -46,7 +46,6 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const error = urlParams.get('error');
-
         if (error === 'email_exists') {
             document.getElementById('error-message').textContent = "Email already exists!";
         } else if (error === 'username_exists') {
