@@ -2,12 +2,15 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const bcrypt = require('bcrypt');
-const session = require('express-session'); // Import express-session
-const User = require('./models/user');
+const session = require('express-session');
+const User = require('./models/user'); // Import your User model
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files
+app.use('/Homes', express.static(path.join(__dirname, 'Homes')));
 
 // Configure session middleware
 app.use(session({
@@ -23,25 +26,28 @@ app.use('/login', express.static(path.join(__dirname, 'Login')));
 app.use('/register', express.static(path.join(__dirname, 'Register')));
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://NateNunthiphat:PrgUXzjFNK3tHs0U@cluster0.yhzls.mongodb.net/')
+mongoose.connect('mongodb+srv://NateNunthiphat:PrgUXzjFNK3tHs0U@cluster0.yhzls.mongodb.net/test', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Database connected'))
     .catch(err => console.error('Database connection error:', err));
 
 // Serve the home page
 app.get('/', (req, res) => {
-    if (req.session.username) {
-        res.sendFile(path.join(__dirname, 'Homes', 'home2.html'));
-    } else {
-        res.sendFile(path.join(__dirname, 'Homes', 'home.html'));
-    }
+    res.sendFile(path.join(__dirname, 'Homes', 'home.html'));
 });
 
 app.get('/logout', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Homes', 'home.html'));
+    req.session.destroy(err => {
+        if (err) {
+            return res.redirect('/');
+        }
+        res.sendFile(path.join(__dirname, 'Homes', 'home.html'));
+    });
 });
+
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'Login', 'login.html'));
 });
+
 app.get('/register', (req, res) => {
     res.sendFile(path.join(__dirname, 'Register', 'register.html'));
 });
@@ -66,21 +72,29 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    const { email, username, password } = req.body; // Assuming both fields are provided
-    const user = await User.findOne({ email, username });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
 
-    if (!user) {
-        return res.redirect('/Login/login.html?error=invalid_credentials'); // Specific error message
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (isMatch) {
-        req.session.username = user.username;
-        console.log(req.session.username);
-        return res.redirect('/');
+    if (user) {
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (isMatch) {
+            req.session.username = user.username; // บันทึกชื่อผู้ใช้ในเซสชัน
+            return res.redirect(`/Homes/home2.html?username=${encodeURIComponent(user.username)}`); // ส่งชื่อผู้ใช้ใน URL
+        } else {
+            return res.redirect('/Login/login.html?error=invalid_credentials');
+        }
     } else {
-        return res.redirect('/Login/login.html?error=password_wrong');
+        return res.redirect('/Login/login.html?error=user_not_found');
     }
+});
+
+app.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.error('Failed to destroy session:', err);
+        }
+        res.redirect('/login'); // ส่งกลับไปที่หน้า Login
+    });
 });
 
 // Start the server
