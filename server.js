@@ -26,7 +26,7 @@ app.use('/login', express.static(path.join(__dirname, 'Login')));
 app.use('/register', express.static(path.join(__dirname, 'Register')));
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://NateNunthiphat:PrgUXzjFNK3tHs0U@cluster0.yhzls.mongodb.net/test', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb+srv://NateNunthiphat:PrgUXzjFNK3tHs0U@cluster0.yhzls.mongodb.net/test')
     .then(() => console.log('Database connected'))
     .catch(err => console.error('Database connection error:', err));
 
@@ -73,7 +73,15 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    let query;
+
+    if (email.includes('@')) {
+        query = { email: email };
+    } else {
+        query = { username: email };
+    }
+
+    const user = await User.findOne(query);
 
     if (user) {
         const isMatch = await bcrypt.compare(password, user.password);
