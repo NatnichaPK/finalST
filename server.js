@@ -68,7 +68,7 @@ app.post('/register', async (req, res) => {
     const newUser = new User({ email, username, password: hashedPassword });
     await newUser.save();
 
-    res.redirect('/login'); // Redirect to the login page after registration
+    res.redirect('/login');
 });
 
 app.post('/login', async (req, res) => {
@@ -78,8 +78,8 @@ app.post('/login', async (req, res) => {
     if (user) {
         const isMatch = await bcrypt.compare(password, user.password);
         if (isMatch) {
-            req.session.username = user.username; // บันทึกชื่อผู้ใช้ในเซสชัน
-            return res.redirect(`/Homes/home2.html?username=${encodeURIComponent(user.username)}`); // ส่งชื่อผู้ใช้ใน URL
+            req.session.username = user.username;
+            return res.redirect(`/Homes/home2.html?username=${encodeURIComponent(user.username)}`);
         } else {
             return res.redirect('/Login/login.html?error=invalid_credentials');
         }
@@ -93,11 +93,11 @@ app.get('/logout', (req, res) => {
         if (err) {
             console.error('Failed to destroy session:', err);
         }
-        res.redirect('/login'); // ส่งกลับไปที่หน้า Login
+        res.redirect('/login');
     });
 });
 
-// Start the server
+
 app.listen(3000, () => {
     console.log('Server running at http://localhost:3000/');
 });
