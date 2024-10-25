@@ -47,9 +47,9 @@
         const urlParams = new URLSearchParams(window.location.search);
         const error = urlParams.get('error');
 
-        if (error === 'invalid_email') {
+        if (error === 'user_not_found') {
             document.getElementById('error-message').textContent = "Invalid email address!";
-        } else if (error === 'password_wrong') {
+        } else if (error === 'invalid_credentials') {
             document.getElementById('error-message').textContent = "Password is wrong!";
         }
     </script>
